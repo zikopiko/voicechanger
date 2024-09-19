@@ -1,0 +1,41 @@
+cmake_minimum_required(VERSION 3.22.1)
+
+project(voicesmith)
+
+# Source and Header files
+file(GLOB_RECURSE HDR "${CMAKE_CURRENT_LIST_DIR}/*.h")
+file(GLOB_RECURSE SRC "${CMAKE_CURRENT_LIST_DIR}/*.cpp")
+
+add_library(${PROJECT_NAME} SHARED ${SRC} ${HDR})
+
+# Include directories
+target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_LIST_DIR}/..")
+
+# Set C++ standard and compile options
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+target_compile_options(${PROJECT_NAME} PRIVATE $<$<CONFIG:RELEASE>:-Ofast>)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror)
+
+# Include additional CMake scripts
+include("${CMAKE_CURRENT_LIST_DIR}/libs/cpm.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/libs/eventpp.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/libs/fmt.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/libs/oboe.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/libs/pffft.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/libs/pocketfft.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/libs/readerwriterqueue.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/libs/stftpitchshift.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/libs/vad.cmake")
+
+# Link libraries
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        android
+        eventpp
+        fmt
+        log
+        oboe
+        pffft
+        pocketfft
+        readerwriterqueue
+        stftpitchshift
+        vad)
